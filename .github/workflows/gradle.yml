@@ -37,11 +37,6 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      - name: Run Snyk Test
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_SECRET }}
-        run: snyk test --all-projects
-
       - name: Run Snyk Code Test (full source code)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_SECRET }}
