@@ -37,10 +37,30 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
+      - name: Run Snyk Dependency Test (third-party packages)
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_SECRET }}
+        run: snyk test --all-projects --sarif-file-output=snyk-deps.sarif
+
       - name: Run Snyk Code Test (full source code)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_SECRET }}
-        run: snyk code test
+        run: snyk code test --sarif-file-output=snyk-code.sarif
+
+      - name: Upload Snyk SARIF results to GitHub
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk-deps.sarif
+
+      - name: Upload Snyk Code SARIF results to GitHub
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk-code.sarif
+
+      - name: Run Snyk Monitor (upload results to Snyk dashboard)
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_SECRET }}
+        run: snyk monitor --all-projects
 
   dependency-submission:
 
