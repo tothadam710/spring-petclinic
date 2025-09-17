@@ -39,7 +39,7 @@ jobs:
 
       - name: Run Snyk Test
         env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_SECRET }}
         run: snyk test
 
   dependency-submission:
